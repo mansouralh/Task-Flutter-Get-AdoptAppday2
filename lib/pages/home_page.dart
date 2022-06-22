@@ -28,22 +28,34 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Provider.of<PetsProvider>(context, listen: false).getPets();
-              },
-              child: const Text("GET"),
-            ),
-            GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height),
-                ),
-                physics: const NeverScrollableScrollPhysics(), // <- Here
-                itemCount: pets.length,
-                itemBuilder: (context, index) => PetCard(pet: pets[index])),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Provider.of<PetsProvider>(context, listen: false).getPets();
+            //   },
+            //   child: const Text("GET"),
+            // ),
+            FutureBuilder(
+                future:
+                    Provider.of<PetsProvider>(context, listen: false).getPets(),
+                builder: ((context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                    return Center(child: CircularProgressIndicator());
+                  else if (snapshot.error != null)
+                    return Text("error");
+                  else
+                    return GridView.builder(
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: MediaQuery.of(context).size.width /
+                              (MediaQuery.of(context).size.height),
+                        ),
+                        physics:
+                            const NeverScrollableScrollPhysics(), // <- Here
+                        itemCount: pets.length,
+                        itemBuilder: (context, index) =>
+                            PetCard(pet: pets[index]));
+                })),
           ],
         ),
       ),
