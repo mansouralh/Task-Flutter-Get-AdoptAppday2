@@ -35,8 +35,8 @@ class HomePage extends StatelessWidget {
             //   child: const Text("GET"),
             // ),
             FutureBuilder(
-                future:
-                    Provider.of<PetsProvider>(context, listen: false).getPets(),
+                future: Provider.of<PetsProvider>(context, listen: false)
+                    .getPetsFirst(),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting)
                     return Center(child: CircularProgressIndicator());
@@ -52,9 +52,9 @@ class HomePage extends StatelessWidget {
                         ),
                         physics:
                             const NeverScrollableScrollPhysics(), // <- Here
-                        itemCount: pets.length,
-                        itemBuilder: (context, index) =>
-                            PetCard(pet: pets[index]));
+                        itemCount: context.watch<PetsProvider>().pets.length,
+                        itemBuilder: (context, index) => PetCard(
+                            pet: context.watch<PetsProvider>().pets[index]));
                 })),
           ],
         ),

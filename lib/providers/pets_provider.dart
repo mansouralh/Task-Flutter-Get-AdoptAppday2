@@ -11,6 +11,10 @@ class PetsProvider extends ChangeNotifier {
         gender: "male")
   ];
 
+  Future<void> getPetsFirst() async {
+    pets = await DioClient().getPets();
+  }
+
   Future<void> getPets() async {
     pets = await DioClient().getPets();
     notifyListeners();
